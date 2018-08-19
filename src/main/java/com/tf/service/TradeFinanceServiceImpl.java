@@ -16,13 +16,11 @@ public class TradeFinanceServiceImpl implements TradeFinanceService{
 	@Autowired
 	private TradeFinanceDao tradeDao;
 	
-	@SuppressWarnings("rawtypes")
-	private Map summary;
+	private Map<String, Object> summary;
 	private List<LetterOfCredit> lcDetails;
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Map getLCSummary(String cin) {
+	public Map<String, Object> getLCSummary(String cin) {
 		
 		lcDetails = tradeDao.getLCData(cin);
 		

@@ -18,6 +18,7 @@ import com.tf.util.APIResponseGenerator;
 @ComponentScan(basePackages = {"com.tf"})
 public class APIController implements RequestHandler<Map<String,Object>, ApiGatewayResponse> {
     
+	@SuppressWarnings("unchecked")
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		
@@ -25,10 +26,10 @@ public class APIController implements RequestHandler<Map<String,Object>, ApiGate
 		ctx.register(APIController.class);
 		ctx.refresh();
 		
-		String cin = ((Map)input.get("queryStringParameters")).get("CIN").toString();
+		String cin = ((Map<String, Object>)input.get("queryStringParameters")).get("CIN").toString();
 		TradeFinanceService tfService = ctx.getBean(TradeFinanceServiceImpl.class);
 		
-		Map results = tfService.getLCSummary(cin);
+		Map<String, Object> results = tfService.getLCSummary(cin);
 		
 		ctx.close();
 		return APIResponseGenerator.response(results);

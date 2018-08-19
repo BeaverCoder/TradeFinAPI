@@ -3,17 +3,17 @@ package com.tf.model;
 import java.util.Map;
 
 public class Response {
-	private Map message;
+	private Map<String, Object> message;
 
-	public Response(Map message) {
+	public Response(Map<String, Object> message) {
 		this.message = message;
 	}
 
-	public Map getMessage() {
+	public Map<String, Object> getMessage() {
 		return message;
 	}
 
-	public void setMessage(Map message) {
+	public void setMessage(Map<String, Object> message) {
 		this.message = message;
 	}
 

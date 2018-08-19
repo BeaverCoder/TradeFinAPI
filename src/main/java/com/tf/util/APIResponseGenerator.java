@@ -8,7 +8,7 @@ import com.tf.model.Response;
 
 public class APIResponseGenerator {
 	
-	public static ApiGatewayResponse response(Map result) {
+	public static ApiGatewayResponse response(Map<String, Object> result) {
 		
 		Response responseBody = new Response(result);
 		
