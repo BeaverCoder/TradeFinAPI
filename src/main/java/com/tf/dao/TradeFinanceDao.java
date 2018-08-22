@@ -10,4 +10,7 @@ import com.tf.model.LetterOfCredit;
 public interface TradeFinanceDao {
 	public List<LetterOfCredit> getLCData(String cin);
 	public int getNumberOfLC(String cin);
+	public int getWorkInProgress(String cin);
+	public int getTotalExposure(String cin);
+	public int getDueExpiringAmount(String cin, List<String> expiryDates);
 }
