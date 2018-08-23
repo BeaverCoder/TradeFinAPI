@@ -68,7 +68,9 @@ public class TradeFinanceDaoImpl implements TradeFinanceDao {
 			Statement stmt = getConnection().createStatement();
 
 			ResultSet rs = stmt.executeQuery(
-					"select count(distinct `LC Number`) from " + TfConstants.TABLE_NAME + " where CIN=" + cin);
+					"select count(distinct `LC Number`) from " + TfConstants.TABLE_NAME +
+					" where CIN=" + cin);
+
 			while (rs.next()) {
 				number = rs.getInt(1);
 			}
@@ -88,7 +90,9 @@ public class TradeFinanceDaoImpl implements TradeFinanceDao {
 			Statement stmt = getConnection().createStatement();
 
 			ResultSet rs = stmt.executeQuery("select sum(`Outstanding Amount`) from " + TfConstants.TABLE_NAME
-					+ " where (Status!=300 or `Record Type`!=99) and CIN=" + cin);
+					+ " where `LC Type`='I' AND (Status!=300 or `Record Type`!=99) and CIN=" + cin
+					+ " AND `LC Number` in (Select `LC Number` from Transaction group by `LC Number` having max(Sequence)=000)");
+
 			while (rs.next()) {
 				number = rs.getInt(1);
 			}
@@ -107,7 +111,10 @@ public class TradeFinanceDaoImpl implements TradeFinanceDao {
 			Statement stmt = getConnection().createStatement();
 
 			ResultSet rs = stmt.executeQuery("select sum(`Outstanding Amount`) from " + TfConstants.TABLE_NAME
-					+ " where Status=300 and `Record Type`=99 and CIN =" + cin);
+					+ " where Status=300 AND `Record Type`=99 AND CIN = " + cin
+					+ " AND Sequence IN (select max(Sequence) from Transaction where CIN=" + cin
+					+ " group by `LC Number`)");
+
 			while (rs.next()) {
 				number = rs.getInt(1);
 			}
@@ -122,7 +129,7 @@ public class TradeFinanceDaoImpl implements TradeFinanceDao {
 	@Override
 	public int getDueExpiringAmount(String cin, List<String> expiryDates) {
 		expiryDates.forEach(date -> {
-			endDates += "\""+date + "\", ";
+			endDates += "\"" + date + "\", ";
 		});
 		endDates = endDates.substring(0, endDates.length() - 2);
 
@@ -131,13 +138,15 @@ public class TradeFinanceDaoImpl implements TradeFinanceDao {
 			Statement stmt = getConnection().createStatement();
 
 			ResultSet rs = stmt.executeQuery("select sum(`Outstanding Amount`) from " + TfConstants.TABLE_NAME
-					+ " where `Expiry Date` in (" + endDates + ") and CIN =" + cin);
+					+ " where CIN=" + cin
+					+ " AND `LC Type`=\"I\" AND `Record Type`=99 AND Status=300 AND Sequence IN (select max(Sequence) from "
+					+ TfConstants.TABLE_NAME + " where CIN=" + cin + " group by `LC Number`) AND `Expiry Date` IN ("
+					+ endDates + ")");
+
 			while (rs.next()) {
 				number = rs.getInt(1);
 			}
-			
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
