@@ -1,6 +1,7 @@
 package com.tf.controller;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +27,10 @@ public class APIController implements RequestHandler<Map<String,Object>, ApiGate
 		ctx.register(APIController.class);
 		ctx.refresh();
 		
-		String cin = ((Map<String, Object>)input.get("queryStringParameters")).get("CIN").toString();
+		Map<String, Object> inputParams = ((Map<String, Object>)input.get("queryStringParameters")).entrySet().stream()
+	            .collect(Collectors.toMap(entry -> entry.getKey().toUpperCase(), entry -> entry.getValue()));
+		
+		String cin = inputParams.get("CIN").toString();
 		TradeFinanceService tfService = ctx.getBean(TradeFinanceServiceImpl.class);
 		
 		Map<String, Object> results = tfService.getLCSummary(cin);
