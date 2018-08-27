@@ -1,0 +1,19 @@
+
+#tradeWidget{
+    margin: 300px auto;
+    width: 500px;
+    max-height: 350px;
+    border: solid 1px black;
+}
+#widget{
+    display: flex;
+    flex-wrap: nowrap;
+}
+#piechart{
+    margin:auto;
+}
+
+.table{
+    margin: auto;
+    align-items: center;
+}

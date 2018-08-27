@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <!-- <link rel="stylesheet" href="tradeStyle.css"> -->
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="UICSS.css">
+  <script src="angular.js"></script>
+  <script src="TF_script.js"></script>
+</head>
+
+<body ng-app="TFApp" ng-controller="TFController">
+
+    <script>
+
+    </script>
+    <form><label>Enter CIN :</label><input type="text" ng-model="read_cin"/><input type="submit" ng-click="searchuser(read_cin)"/></form>
+    <div id="tradeWidget" >
+        
+        <div id="widget">
+            <div id="piechart" ng-show="status_customer"></div>
+            <div id="nopie" ng-hide="status_customer" >Sorry, Customer does not Exist</div>
+            <table class="table">
+                <tbody>
+                    <tr class="danger">
+                        <td>Total Exposure</td>
+                        <td><b>£{{ userDetails.message['Total Exposure'] }}</b></td>
+                    </tr>
+                    <tr class="info">
+                        <td>Work in Progress</td>
+                        <td><b>£{{ userDetails.message['Work in Progress'] }}</b></td>
+                    </tr>
+                    <tr></tr>
+                        <tr class="success">
+                            <td>LCs expiring in next 30 days</td>
+                            <td><b>{{ userDetails.message['Expiring LC'] }}</b></td>
+                        </tr>
+                        <tr class="success">
+                            <td>Expiring Amount</td>
+                            <td><b>£{{ userDetails.message['Expiring Amount'] }}</b></td>
+                        </tr>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+
+
+<script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart(x,y) {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work in Progress', x],
+            ['Total Exposure', y],
+
+        ]);
+
+        // Optional; add a title and set the width and height of the chart
+        var options = { 'title': 'Letter of Credit', 'width': 310, 'height': 200 };
+
+        // Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+</script>
+</html>
